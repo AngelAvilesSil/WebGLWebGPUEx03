@@ -1,9 +1,16 @@
 
 // Will do the same array handlintg
 // I did in previous assignment with
-// buttons and vertices for easy handling
+// buttons and vertices for easy handling.
 let stars = [];
+let planets = [];
 
+// These two since being default and
+// having specific requirements such
+// specific textures, then worth making
+// them kind of unique
+let earth;
+let moon;
 
 let theEarthTexture;
 let theMoonTexture;
@@ -17,7 +24,8 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(700, 700, WEBGL);
+  
 }
 
 function draw() {
