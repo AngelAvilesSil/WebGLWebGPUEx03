@@ -11,7 +11,10 @@ const kStarStroke = 3;
 // should be in the starfield if non
 // specified.
 const kNumDefaultStars = 100;
-const kRandomDeep = 600;
+// all looked flat and even
+// in ther same plane, so decided
+// to add some deepness for starfield
+const kRandomDeep = 600;	
 
 // Will do the same array handlintg
 // I did in previous assignment with
