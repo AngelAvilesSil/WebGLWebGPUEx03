@@ -15,8 +15,8 @@ const kNumDefaultStars = 100;
 // all looked flat and even
 // in ther same plane, so decided
 // to add some deepness for starfield
-const kRandomDeep = 1400;
-const kInnerDeep = 800;
+const kRandomDeep = 800;
+const kInnerDeep = 700;
 
 // Will do the same array handlintg
 // I did in previous assignment with
@@ -30,9 +30,11 @@ let planets = [];
 // them kind of unique.
 let earth;
 let moon;
-
 let theEarthTexture;
 let theMoonTexture;
+
+// These are for animation and UI control
+let isPaused = false;
 
 
 function preload() {
@@ -40,7 +42,7 @@ function preload() {
 	// that I downloaded from where the assignment info and
 	// pdf with requirements is.
 	theEarthTexture = loadImage("assets/textures/earth_daymap.jpg");
-	theMoonTexture = loadImage("assets/textures/moon.jpg")
+	theMoonTexture = loadImage("assets/textures/moon.jpg");
 }
 
 
@@ -50,6 +52,8 @@ function setup() {
 	// I will set all the starts dfrom the starfield
 	// in the stars array I did before.
 	setupStarField();
+
+	earth = new Planet(10, 60, 0.01, 'blue', theEarthTexture);
 }
 
 
@@ -71,6 +75,15 @@ function draw() {
 		// This will be represented by a yellow sphere.
 		sphere(kSunRadius);
 	pop();
+
+	// By default, there will be one planet in your
+	// solar system
+	if (!isPaused) {
+		//This planet should spin around its own axis.
+		earth.refresh();
+	}
+
+	earth.draw();
 
 }
 
