@@ -12,8 +12,9 @@ class Planet {
 		// Some planets will have moons
 		this.moon = null;
 		// The 3D modeel looked too sad with just
-		// all going in circles in the same plane
-		// reminded me old elementary models
+		// all going in and starting in the same place
+		// so let spawn it randomly around the surrounding
+		// of the sun
 		this.angle = random(TWO_PI);	// so this shoud give some variety
 	}
 

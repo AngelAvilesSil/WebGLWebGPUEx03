@@ -53,13 +53,14 @@ function setup() {
 	// in the stars array I did before.
 	setupStarField();
 
-	earth = new Planet(10, 60, 0.01, 'blue', theEarthTexture);
+	earth = new Planet(10, 120, 0.01, 'blue', theEarthTexture);
+	moon = new Moon(2, 20, 0.02, theMoonTexture);
 }
 
 
 function draw() {
 	background(0);
-	lights(180);
+	lights();
 
 	orbitControl();
 
@@ -81,9 +82,11 @@ function draw() {
 	if (!isPaused) {
 		//This planet should spin around its own axis.
 		earth.refresh();
+		moon.refresh(earth.x, earth.y);
 	}
 
 	earth.draw();
+	moon.draw();
 
 }
 
