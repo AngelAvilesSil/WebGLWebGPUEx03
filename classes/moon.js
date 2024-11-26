@@ -1,3 +1,16 @@
+/*
+*	FILE:               moon.js
+*	PROJECT:            Assignment 03
+*	PROGRAMMERS:        Angel Armando Aviles Sil
+*	First revision:     2024-11-24
+*	
+*	Description:
+*	                    This template of an object will be a moon
+*                       it accepts a radius, a distance from a planet,
+*						the	speed of rotation around the planet, and
+*						the texture in that order.
+*/
+
 class Moon {
 	
 	constructor(radius, orbitRadius, orbitSpeed, texture = null) {

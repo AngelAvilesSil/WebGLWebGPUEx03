@@ -1,3 +1,18 @@
+/*
+*	FILE:               planet.js
+*	PROJECT:            Assignment 03
+*	PROGRAMMERS:        Angel Armando Aviles Sil
+*	First revision:     2024-11-24
+*	
+*	Description:
+*	                    This template of an object will be a planet
+*                       it accepts a radius, a distance from sun, the
+*						speed of rotation around the sun, the color or
+*						texture in that order.
+*						If entered a color and texture, the texture
+*						is the one to be taken while its not null.
+*/
+
 class Planet {
 	constructor(radius, orbitRadius, orbitSpeed, color, texture = null) {
 		this.radius = radius;				// The size of the planet

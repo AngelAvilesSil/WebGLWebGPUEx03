@@ -1,4 +1,16 @@
-
+/*
+*	FILE:               sketch.js
+*	PROJECT:            Assignment 03
+*	PROGRAMMERS:        Angel Armando Aviles Sil
+*	First revision:     2024-11-24
+*	
+*	Description:
+*					The assignment is to demonstrate 
+* 					the use the p5.js 3D functionality
+*					to build a small working solar system
+*					model, with planets that orbit a star, 
+*					and moons that orbit the planets.
+*/
 
 // this is for the random colors generations
 // the stars
