@@ -63,6 +63,7 @@ function setup() {
 	// using DOM elements with the appropriate p5.js apis.
 	// These elements should be drawn to the right of the
 	// canvas where the solar system is drawn.
+	writeInstructions();
 	setAllTheGUI();
 
 	
@@ -174,6 +175,20 @@ function drawStarField() {
 	});
 }
 
+// Just a set of instructions over how the application works, hopefully they are clear
+function writeInstructions() {
+    let instructions = `
+        For adding a planet, first decide on its color and whether it should have a moon. 
+        Once you've made your choices, click the 'Add Planet' button. You can then use 
+        the sliders to adjust your new planet and its moon (if it has one) to your liking. 
+        Note that once a planet is added, the settings you were working on will be finalized, 
+        and you won't be able to modify them again.
+    `;
+
+    let instructionsLabel = createP(instructions);
+    instructionsLabel.position(1000, 0); // Adjust position to fit below other GUI elements
+    instructionsLabel.style("width", "300px"); // Optional: Set width to make it more readable
+}
 
 // This is my first try using DOM from p5.js.... after some reading
 // noticed that is is (maybe) earier doing it this way rather than with
