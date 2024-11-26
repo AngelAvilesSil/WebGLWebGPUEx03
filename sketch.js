@@ -259,18 +259,29 @@ function setAllTheGUI()
 	// Size of the planet (radius).
 	let customSizePlanetLabel = createP("Custom Planet Size:");
 	customSizePlanetLabel.position(720,250);
-	let customSizePlanetSlider = createSlider(kMinPlanetSize, kSunRadius*0.8, kMinPlanetSize, 1);
+	let customSizePlanetSlider;
+	if (planets.length > 0) {
+		customSizePlanetSlider = createSlider(
+			kMinPlanetSize, kSunRadius*0.8,
+			planets[planets.length - 1].radius, 1
+		);
+	} else {
+		customSizePlanetSlider = createSlider(kMinPlanetSize, kSunRadius*0.8, kMinPlanetSize, 1);
+	}
 	customSizePlanetSlider.position(720,290);
 	let customPlanetValueShow = createP(customSizePlanetSlider.value().toString());
 	customPlanetValueShow.position(900,275);
 	customSizePlanetSlider.input(() => {
+		if (planets.length > 0) {
+			planets[planets.length - 1].radius = customSizePlanetSlider.value();
+		}
 		customPlanetValueShow.html(customSizePlanetSlider.value().toString());
 	});
 
 	// Colour of the planet
 	let customColorPlanetLabel = createP("Custom Planet Colour:");
 	customColorPlanetLabel.position(950,250);
-	let customCOlorPlanetPicker = createColorPicker('green');
+	let customCOlorPlanetPicker = createColorPicker('red');
 	customCOlorPlanetPicker.position(950,290);
 
 	// Speed at which the planet moves around the sun.
@@ -339,6 +350,9 @@ function setAllTheGUI()
 	let customPlanetMoonValueShow = createP(customSizePlanetMoonSlider.value().toString());
 	customPlanetMoonValueShow.position(900,455);
 	customSizePlanetMoonSlider.input(() => {
+		if ([planets.length > 0]) {
+			planets[planets.length - 1].moon.radius = customSizePlanetMoonSlider.value();
+		}
 		customPlanetMoonValueShow.html(customSizePlanetMoonSlider.value().toString());
 	});
 
@@ -358,14 +372,14 @@ function setAllTheGUI()
 	let customMoonDistanceValueShow = createP(customMoonDistanceSlider.value().toString());
 	customMoonDistanceValueShow.position(900,505)
 	customMoonDistanceSlider.input(() => {
-		if (planets.length > 0 && planets[planets.length].moon != null) {
+		if (planets.length > 0) {
 			planets[planets.length - 1].moon.orbitRadius = customMoonDistanceSlider.value()
 		}
 		customMoonDistanceValueShow.html(customMoonDistanceSlider.value().toString());
 	});
 
 	// Speed at which the moon orbits the planet.
-	let customMoonRotationLabel = createP("Custom Moon Distance from Planet:");
+	let customMoonRotationLabel = createP("Custom Moon Rotation Speed:");
 	customMoonRotationLabel.position(720,530);
 	let customMoonRotationSlider;
 	if (planets.length > 0) {
@@ -383,7 +397,7 @@ function setAllTheGUI()
 	let customMoonRotationValueShow = createP(customMoonRotationSlider.value().toString());
 	customMoonRotationValueShow.position(900,555)
 	customMoonRotationSlider.input(() => {
-		if (planets.length > 0 && planets[planets.length].moon != null) {
+		if (planets.length > 0) {
 			planets[planets.length - 1].moon.orbitSpeed = customMoonRotationSlider.value()
 		}
 		customMoonRotationValueShow.html(customMoonRotationSlider.value().toString());
@@ -395,13 +409,23 @@ function setAllTheGUI()
 	addPlanetButton.mousePressed(() => {
 		let tempPlanet = new Planet(
 			customSizePlanetSlider.value(), customPlanetDistanceSlider.value(),
-			customPlanetRotationSlider.value, customCOlorPlanetPicker.value()
+			customPlanetRotationSlider.value(), customCOlorPlanetPicker.value()
 		);
-		if (customPlanetHasMoonBox.value()) {
+		if (customPlanetHasMoonBox.checked()) {
 			tempPlanet.moon = new Moon(
 				customSizePlanetMoonSlider.value(), customMoonDistanceSlider.value(),
 				customMoonRotationSlider.value(), theMoonTexture
 			);
+		}
+		planets.push(tempPlanet);
+	
+		// Update sliders for the newly added planet
+		customPlanetRotationSlider.value(tempPlanet.orbitSpeed);
+		customPlanetDistanceSlider.value(tempPlanet.orbitRadius);
+	
+		if (tempPlanet.moon) {
+			customMoonDistanceSlider.value(tempPlanet.moon.orbitRadius);
+			customMoonRotationSlider.value(tempPlanet.moon.orbitSpeed);
 		}
 	});
 
@@ -423,6 +447,33 @@ function setAllTheGUI()
 	let resetButton = createButton("Reset");
 	resetButton.position(850,630);
 	resetButton.mousePressed(() => {
-		
+		planets = []; // Clear planets
+		numDefaultStars = 100; // Reset default number of stars
+		setupStarField(); // Recreate starfield
+	
+		// Reset Earth and Moon
+		earth = new Planet(10, 120, 0.01, 'blue', theEarthTexture);
+		moon = new Moon(2, 20, 0.02, theMoonTexture);
+	
+		// Reset sliders to their default values
+		earthDistanceSlider.value(earth.orbitRadius);
+		earthRotationSlider.value(earth.orbitSpeed);
+		moonDistanceSlider.value(moon.orbitRadius);
+		moonRotationSlider.value(moon.orbitSpeed);
+	
+		// Reset planet sliders
+		customSizePlanetSlider.value(kMinPlanetSize);
+		customPlanetDistanceSlider.value((kSunRadius * 1.50 + kSunRadius * 10.00) / 2);
+		customPlanetRotationSlider.value((kMinPlanetRotation + kMaxPlanetRotation) / 2);
+		customCOlorPlanetPicker = createColorPicker('red');
+		customPlanetHasMoonBox.checked(false);
+	
+		// Reset moon sliders
+		customSizePlanetMoonSlider.value(random(kMinPlanetSize, kSunRadius * 0.8));
+		customMoonDistanceSlider.value(random(earth.radius * 1.20, earth.radius * 3.0));
+		customMoonRotationSlider.value(random(kMinPlanetRotation, kMaxPlanetRotation));
+	
+		// Reset paused state
+		isPaused = false;
 	});
 }
