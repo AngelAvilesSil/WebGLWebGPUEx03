@@ -11,7 +11,7 @@ const kSunRadius = 30;
 // This is the number of stars that
 // should be in the starfield if non
 // specified.
-const kNumDefaultStars = 100;
+let numDefaultStars = 100;
 // all looked flat and even
 // in ther same plane, so decided
 // to add some deepness for starfield
@@ -49,12 +49,19 @@ function preload() {
 function setup() {
 	createCanvas(700, 700, WEBGL);
 
+	earth = new Planet(10, 120, 0.01, 'blue', theEarthTexture);
+	moon = new Moon(2, 20, 0.02, theMoonTexture);
+
 	// I will set all the starts dfrom the starfield
 	// in the stars array I did before.
 	setupStarField();
+	//GUI elements for this project can be created
+	// using DOM elements with the appropriate p5.js apis.
+	// These elements should be drawn to the right of the
+	// canvas where the solar system is drawn.
+	setAllTheGUI();
 
-	earth = new Planet(10, 120, 0.01, 'blue', theEarthTexture);
-	moon = new Moon(2, 20, 0.02, theMoonTexture);
+	
 }
 
 
@@ -92,9 +99,12 @@ function draw() {
 
 
 function setupStarField() {
+	// After some testing, saw that I needed to clear it
+	// before updating a new number of stars
+	stars = [];
 	// The background of the application should be filled
 	// with (by default) 100 randomly placed stars.
-	for (let i = 0; i < kNumDefaultStars; i++) {
+	for (let i = 0; i < numDefaultStars; i++) {
 		let tempX;		// having a temporary X coordinate
 		let tempY;		// having a temporary y coordinate
 		let tempZ;		// having a temporary z coordinate
@@ -129,6 +139,7 @@ function setupStarField() {
 	}
 }
 
+
 function drawStarField() {
 	stars.forEach(star => {
 		push();
@@ -141,3 +152,75 @@ function drawStarField() {
 		pop();
 	});
 }
+
+
+// This is my first try using DOM from p5.js.... after some reading
+// noticed that is is (maybe) earier doing it this way rather than with
+// html and other javascritpts APIs... or thats what I hope
+function setAllTheGUI()
+ {
+	// A text input for entering the number of stars. This
+	// will need an associated button to take yhe contents
+	// of the text field and update and regenerate the star positions.
+	let howManyStarsLabel = createP("Number of Stars:");
+	howManyStarsLabel.position(720, 0);
+	let howManyStarsInput = createInput(numDefaultStars.toString());
+	howManyStarsInput.position(720, 40);
+	// Then a button just to make it happen and because I am not
+	// good with other kind of events, so 
+	// "all you gotta do is hawk tuah click on that thang! you know what I mean?"
+	let howManyStarsButton = createButton('Update Stars');
+	howManyStarsButton.position(800, 40);
+	howManyStarsButton.mousePressed(() => {
+	  numDefaultStars = int(howManyStarsInput.value());
+	  setupStarField();
+	});
+	
+	// A slider controlling the Earth’s distance from the sun.
+	let earthDistanceLabel = createP("Earth distance from Sun:");
+	earthDistanceLabel.position(720,50)
+	let earthDistanceSlider = createSlider(kSunRadius * 1.50, kSunRadius * 10.00, earth.orbitRadius, 1);
+	earthDistanceSlider.position(720, 90);
+	let earthDistanceValueShow = createP(earthDistanceSlider.value().toString());
+	earthDistanceValueShow.position(900, 75);
+	earthDistanceSlider.input(() => {
+		earth.orbitRadius = earthDistanceSlider.value()
+		earthDistanceValueShow.html(earthDistanceSlider.value().toString());
+	});
+
+	// A slider controlling the Earth’s rotation speed
+	let earthRotationLabel = createP("Earth Rotation Speed:");
+	earthRotationLabel.position(720, 100);
+	let earthRotationSlider = createSlider(0.01, 0.1, earth.orbitSpeed, 0.01);
+	earthRotationSlider.position(720, 140);
+	let earthRotationValueShow = createP(earthRotationSlider.value().toString());
+	earthRotationValueShow.position(900, 125);
+	earthRotationSlider.input(() => {
+		earth.orbitSpeed = earthRotationSlider.value();
+		earthRotationValueShow.html(earthRotationSlider.value().toString());
+	});
+
+	// A slider controlling the Moon’s distance from the Earth.
+	let moonDistanceLabel = createP("Moon Distance from Earth:");
+	moonDistanceLabel.position(720,150);
+	let moonDistanceSlider = createSlider(earth.radius * 1.20, earth.radius * 3.0, moon.orbitRadius, 1);
+	moonDistanceSlider.position(720, 190);
+	let moonDistanceValueShow = createP(moonDistanceSlider.value().toString());
+	moonDistanceValueShow.position(900,175)
+	moonDistanceSlider.input(() => {
+		moon.orbitRadius = moonDistanceSlider.value();
+		moonDistanceValueShow.html(moonDistanceSlider.value().toString());
+	});
+
+	// A slider controlling the Moon’s rotation speed.
+	let moonRotationLabel = createP("Moon Rotation Speed:");
+	moonRotationLabel.position(720,200);
+	let moonRotationSlider = createSlider(0.02, 0.2, moon.orbitSpeed, 0.02);
+	moonRotationSlider.position(720, 240);
+	let moonRotationValueShow = createP(moonRotationSlider.value().toString());
+	moonRotationValueShow.position(900,225);
+	moonRotationSlider.input(() => {
+		moon.orbitSpeed = moonRotationSlider.value();
+		moonRotationValueShow.html(moonRotationSlider.value().toString());
+	});
+ }
